@@ -5,6 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OtpRepository extends MongoRepository<OTP,Long> {
-    public void findByOtp(String Otp);
+public interface OtpRepository extends MongoRepository<OTP,String> {
+    public boolean findByOtp(int Otp);
 }

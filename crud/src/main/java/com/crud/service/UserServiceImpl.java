@@ -12,8 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -68,6 +71,18 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok(new SuccessResponse("Login successful"));
     }
 
+    public boolean validateOtp(String email,int otps) {
+        String OTP = String.valueOf(otps);
+        List<OTP> otpStore = otpRepository.findAll().stream()
+                .filter(otp -> otp.getUser() != null && otp.getUser().getEmail().equals(email)) // Filter by email within the User object
+                .collect(Collectors.toList());
+        for (OTP otp : otpStore) {
+            if (otp.getOtp().equalsIgnoreCase(OTP)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     @Override
@@ -80,8 +95,11 @@ public class UserServiceImpl implements UserService {
         int otp = otpGenerator();
         emailService.sendEmail(email, "Forget Password", otp);
         saveOtp(email, otp);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new MessageDTO("success", "EMAIL_VERIFIED,LINK_SENT_ON_E-MAIL"));
+          boolean isValidate = validateOtp(email,otp);
+        if(isValidate) {
+            return ResponseEntity.status(HttpStatus.OK).body(new MessageDTO("success", "EMAIL_VERIFIED,LINK_SENT_ON_E-MAIL"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageDTO("failed", "FAILED_TO_SEND_EMAIL"));
     }
 
     public int otpGenerator() {

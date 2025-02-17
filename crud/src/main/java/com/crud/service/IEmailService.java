@@ -1,34 +1,48 @@
 package com.crud.service;
 
 
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
+import jakarta.mail.*;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 
+@Service
 public class IEmailService implements EmailService{
+    @Value("${spring.mail.host}")
+    private String host;
+
+    @Value("${spring.mail.port}")
+    private int port;
+
+    @Value("${spring.mail.username}")
+    private String username;
+
+    @Value("${spring.mail.password}")
+    private String password;
 
     @Override
     public void sendEmail(String email, String body, int otp) {
-        Properties properties = System.getProperties();
-        String host = "127.0.0.1";
-        String recepent = email;
-        String sender = properties.getProperty("username");
-        String password = properties.getProperty("password");
-        properties.setProperty("mail.smtp.host",host);
-        Session session = Session.getDefaultInstance(properties);
+        Properties props = new Properties();
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
         try{
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(sender));
-            message.addRecipients(Message.RecipientType.TO, String.valueOf(new InternetAddress(recepent)));
+            message.setFrom(new InternetAddress(username));
+            message.addRecipients(Message.RecipientType.TO,InternetAddress.parse(email));
             message.setSubject("Forget password mail");
-            message.setText("Your Forget password Otp: ");
+            message.setText("Your Forget password Otp: "+otp);
             Transport.send(message);
             System.out.println("mail Sent Successfully");
         } catch (AddressException e) {
