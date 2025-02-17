@@ -1,0 +1,9 @@
+com\crud\controller\UserController.class
+com\crud\service\UserServiceImpl.class
+com\crud\CrudApplication.class
+com\crud\config\Configurations.class
+com\crud\repositories\UserRepository.class
+com\crud\dto\LoginDTO.class
+com\crud\dto\RegisterDTO.class
+com\crud\model\Users.class
+com\crud\service\UserService.class
