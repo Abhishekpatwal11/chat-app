@@ -1,6 +1,8 @@
 package com.crud.controller;
 
+import com.crud.dto.ChangePassDTO;
 import com.crud.dto.LoginDTO;
+import com.crud.dto.OtpValidationRequest;
 import com.crud.dto.RegisterDTO;
 import com.crud.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +34,18 @@ public class UserController {
     }
 
     @PostMapping("/forget-password")
-    public ResponseEntity<?> forgetPassword(@RequestParam String email){
+    public ResponseEntity<?> forgetPassword(@RequestParam String email) {
         return userService.forgetPassword(email);
 
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOTP(@RequestBody OtpValidationRequest request) {
+        return userService.verifyOTP(request);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePassDTO changePassDTO) {
+        return userService.passwordChange(changePassDTO);
     }
 }

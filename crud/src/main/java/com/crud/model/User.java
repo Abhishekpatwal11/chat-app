@@ -2,19 +2,19 @@ package com.crud.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = "users")
 public class User {
     private String fullName;
-    private String userName;
+    private String username;
     private String email;
     private String password;
 
     public User() {
     }
 
-    public User(String fullName, String userName, String email, String password) {
+    public User(String fullName, String username, String email, String password) {
         this.fullName = fullName;
-        this.userName = userName;
+        this.username = username;
         this.email = email;
         this.password = password;
     }
@@ -27,12 +27,12 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

@@ -4,7 +4,11 @@ import com.crud.model.OTP;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
+
 @Repository
 public interface OtpRepository extends MongoRepository<OTP,String> {
-    public boolean findByOtp(int Otp);
+
+    Optional<OTP> findByUserEmailAndOtpAndStatus(String email, String otp, int i);
 }

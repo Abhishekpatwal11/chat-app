@@ -5,23 +5,24 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document
+@Document(collection = "OTP")
 public class OTP {
     private long otpId;
     private User user;
     private String otp;
-    private LocalDateTime experationDate;
+    private LocalDateTime expirationDate;
     private int status;
 
-    public OTP(LocalDateTime experationDate, long otpId, User user, String otp, int status) {
-        this.experationDate = experationDate;
+
+    public OTP() {
+    }
+
+    public OTP(long otpId, User user, String otp, LocalDateTime expirationDate, int status) {
         this.otpId = otpId;
         this.user = user;
         this.otp = otp;
+        this.expirationDate = expirationDate;
         this.status = status;
-    }
-
-    public OTP() {
     }
 
     public long getOtpId() {
@@ -48,12 +49,12 @@ public class OTP {
         this.otp = otp;
     }
 
-    public LocalDateTime getExperationDate() {
-        return experationDate;
+    public LocalDateTime getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setExperationDate(LocalDateTime experationDate) {
-        this.experationDate = experationDate;
+    public void setExpirationDate(LocalDateTime expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public int getStatus() {
@@ -63,6 +64,4 @@ public class OTP {
     public void setStatus(int status) {
         this.status = status;
     }
-
-
 }
